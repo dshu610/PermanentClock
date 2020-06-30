@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
     android:background="@drawable/background2"
-    android:keepScreenOn="true">
+    android:keepScreenOn="true"
+    android:paddingTop="10dp">
 
     <TextClock
         android:id="@+id/textClockdate"
