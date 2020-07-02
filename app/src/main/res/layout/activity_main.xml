@@ -6,55 +6,60 @@
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
     android:background="@drawable/background2"
-    android:keepScreenOn="true"
-    android:paddingTop="10dp">
+    android:keepScreenOn="true">
 
     <TextClock
         android:id="@+id/textClockdate"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:format12Hour="EEEE, MMMM dd"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
+        android:paddingLeft="100dp"
         android:textColor="#018CB5"
-        android:textSize="35sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="45dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textClock" />
 
     <TextClock
         android:id="@+id/textClock"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:format12Hour="hh:mm"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:includeFontPadding="false"
+        android:paddingLeft="10dp"
+        android:paddingTop="40dp"
         android:textColor="#12A1CA"
         android:textSize="200sp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@id/textClockdate"
-        app:layout_constraintTop_toBottomOf="@id/textClockdate" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textClock">
+        android:id="@+id/weather"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        android:background="#594B889A"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/weatherIcon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:paddingRight="5sp" />
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:paddingLeft="15dp" />
 
         <TextView
             android:id="@+id/weatherTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/weatherIcon"
+            android:layout_below="@id/weatherIcon"
+            android:paddingLeft="15dp"
             android:text="45"
-            android:textColor="#0581E3"
-            android:textSize="45dp" />
+            android:textColor="#C6C2C2"
+            android:textSize="50dp"
+            android:textStyle="normal" />
 
     </RelativeLayout>
 

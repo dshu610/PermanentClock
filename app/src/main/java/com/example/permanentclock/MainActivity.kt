@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,7 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mHandler: Handler
     private lateinit var mRunnable: Runnable
-    private lateinit var wakeLock: PowerManager.WakeLock
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +54,17 @@ class MainActivity : AppCompatActivity() {
         mHandler.post(mRunnable)
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.e("PermanentClock", "PermanentClock has stopped")
+        mHandler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e("PermanentClock", "PermanentClock has paused")
+    }
+
     private fun getCurrentWeather() {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -70,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<OWMWeatherResponse>, t: Throwable) {
-                //t.printStackTrace()
+                Log.e("PermanentClock", t.message, t)
             }
         })
 
@@ -86,11 +97,10 @@ class MainActivity : AppCompatActivity() {
         val imgResource = String.format("wi_%s_2x", response.weather[0].icon)
         val res = resources.getIdentifier(imgResource, "drawable", packageName)
         iconView.setImageResource(res)
-        val detailsFormat = "%s\u00b0 (%s°)   H: %s%%   W: %s"
+        val detailsFormat = "T: %s\u00b0\nH: %s%%\nW: %s"
         tempView.text = String.format(
             detailsFormat,
             convertDouble(response.main.temp),
-            convertDouble(response.main.feels_like),
             convertDouble(response.main.humidity),
             convertDouble(response.wind.speed)
         )
