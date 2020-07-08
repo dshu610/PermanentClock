@@ -12,4 +12,12 @@ interface OWMApi {
         @Query("q") city: String,
         @Query("units") units: String
     ): Call<OWMWeatherResponse>
+
+    @GET("weather")
+    fun getCurrentWeather(
+        @Query("appid") appid: String,
+        @Query("lon") lon: String,
+        @Query("lat") lat: String,
+        @Query("units") units: String
+    ): Call<OWMWeatherResponse>
 }

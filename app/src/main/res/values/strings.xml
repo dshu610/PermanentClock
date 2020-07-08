@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Permanent Clock</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="colors_header">Colors</string>
+
+    <!-- Messages Preferences -->
+    <string name="unit_title">Degrees in</string>
+
+    <!-- Sync Preferences -->
+    <string name="color_clock_title">Clock</string>
+    <string name="color_date_title">Date</string>
+    <string name="color_location_title">Location</string>
+    <string name="color_weather_title">Weather details</string>
 </resources>

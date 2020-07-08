@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
     android:background="@drawable/background2"
     android:keepScreenOn="true">
 
+    <ImageView
+        android:id="@+id/settingsButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_settings_black_24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextClock
         android:id="@+id/textClockdate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:format12Hour="EEEE, MMMM dd"
         android:gravity="center_horizontal"
         android:includeFontPadding="false"
-        android:paddingLeft="100dp"
-        android:textColor="#018CB5"
+        android:paddingRight="180dp"
+        android:textColor="@color/date_default"
         android:textSize="45dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textClock" />
 
     <TextClock
         android:id="@+id/textClock"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:format12Hour="hh:mm"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:paddingLeft="10dp"
+        android:paddingRight="180dp"
         android:paddingTop="40dp"
-        android:textColor="#12A1CA"
-        android:textSize="200sp"
+        android:textColor="@color/clock_default"
+        android:textSize="190sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,26 +48,42 @@
         android:id="@+id/weather"
         android:layout_width="180dp"
         android:layout_height="match_parent"
-        android:background="#594B889A"
+        android:background="@color/weather_bg_default"
+        android:gravity="center_vertical"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/weather_default"
+            android:textSize="25dp"
+            android:textAlignment="center"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:typeface="monospace"
+            android:layout_centerHorizontal="true"/>
+
         <ImageView
             android:id="@+id/weatherIcon"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:paddingLeft="15dp" />
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_below="@id/location"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            />
 
         <TextView
             android:id="@+id/weatherTemp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/weatherIcon"
+            android:textColor="@color/weather_default"
+            android:textSize="45dp"
             android:paddingLeft="15dp"
-            android:text="45"
-            android:textColor="#C6C2C2"
-            android:textSize="50dp"
-            android:textStyle="normal" />
+            android:typeface="monospace"
+            />
 
     </RelativeLayout>
 

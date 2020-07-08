@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="clock_default">#12A1CA</color>
+    <color name="date_default">#018CB5</color>
+    <color name="weather_default">#C6C2C2</color>
+    <color name="weather_bg_default">#594B889A</color>
 </resources>

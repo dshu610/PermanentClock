@@ -1,0 +1,32 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="imperical"
+        app:entries="@array/unit_entries"
+        app:entryValues="@array/unit_values"
+        app:key="unit"
+        app:title="@string/unit_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory app:title="@string/colors_header">
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:defaultValue="@color/clock_default"
+            app:key="clockTextColor"
+            app:title="@string/color_clock_title" />
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:defaultValue="@color/weather_default"
+            app:key="weatherTextColor"
+            app:title="@string/color_weather_title" />
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:defaultValue="@color/date_default"
+            app:key="dateTextColor"
+            app:title="@string/color_date_title" />
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            app:defaultValue="@color/weather_default"
+            app:key="locationTextColor"
+            app:title="@string/color_location_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
