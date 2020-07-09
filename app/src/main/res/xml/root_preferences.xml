@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
-        app:defaultValue="imperical"
+        app:defaultValue="imperial"
         app:entries="@array/unit_entries"
         app:entryValues="@array/unit_values"
         app:key="unit"
