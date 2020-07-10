@@ -20,6 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.Manifest
+import android.content.res.Configuration
 import android.preference.PreferenceManager
 import android.widget.TextClock
 import androidx.activity.result.ActivityResultLauncher
@@ -93,6 +94,11 @@ class MainActivity : AppCompatActivity() {
         locationView.setTextColor(locationColor)
         weatherDetailsView.setTextColor(weatherColor)
         dateView.setTextColor(dateColor)
+
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            val clockMinView: TextClock = findViewById(R.id.textClockMM)
+            clockMinView.setTextColor(clockColor)
+        }
     }
 
     private fun stopLocationUpdates() {
