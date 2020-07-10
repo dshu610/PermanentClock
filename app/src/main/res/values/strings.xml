@@ -13,4 +13,9 @@
     <string name="color_date_title">Date</string>
     <string name="color_location_title">Location</string>
     <string name="color_weather_title">Weather details</string>
+
+    <!-- Reset Settings Dialog -->
+    <string name="reset_message">This will remove all your settings and revert to the default values. Continue?</string>
+    <string name="reset_yes_btn">Yes</string>
+    <string name="reset_no_btn">No</string>
 </resources>
