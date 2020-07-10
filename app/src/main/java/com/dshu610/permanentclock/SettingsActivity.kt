@@ -1,4 +1,4 @@
-package com.example.permanentclock
+package com.dshu610.permanentclock
 
 import android.os.Bundle
 import androidx.preference.PreferenceManager

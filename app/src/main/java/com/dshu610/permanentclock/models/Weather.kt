@@ -8,15 +8,13 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
-package com.example.permanentclock.models
+package com.dshu610.permanentclock.models
 import com.google.gson.annotations.SerializedName
 
-data class Main (
+data class Weather (
 
-	@SerializedName("temp") val temp : Double,
-	@SerializedName("feels_like") val feels_like : Double,
-	@SerializedName("temp_min") val temp_min : Double,
-	@SerializedName("temp_max") val temp_max : Double,
-	@SerializedName("pressure") val pressure : Double,
-	@SerializedName("humidity") val humidity : Double
+	@SerializedName("id") val id : Int,
+	@SerializedName("main") val main : String,
+	@SerializedName("description") val description : String,
+	@SerializedName("icon") val icon : String
 )

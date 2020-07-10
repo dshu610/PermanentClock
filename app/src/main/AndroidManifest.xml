@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.permanentclock">
+    package="com.dshu610.permanentclock">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -14,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppFullScreenTheme">
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.dshu610.permanentclock.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.dshu610.permanentclock.MainActivity"
             android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

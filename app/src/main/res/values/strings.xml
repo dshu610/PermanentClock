@@ -2,6 +2,10 @@
     <string name="app_name">Permanent Clock</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Open Weather Map -->
+    <string name="owm_base_url">https://api.openweathermap.org/data/2.5/</string>
+    <string name="owm_api_key">[ENTER API KEY HERE]</string>
+
     <!-- Preference Titles -->
     <string name="colors_header">Colors</string>
 

@@ -1,6 +1,6 @@
-package com.example.permanentclock
+package com.dshu610.permanentclock
 
-import com.example.permanentclock.models.OWMWeatherResponse
+import com.dshu610.permanentclock.models.OWMWeatherResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

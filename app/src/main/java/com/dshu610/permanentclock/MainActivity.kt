@@ -1,4 +1,4 @@
-package com.example.permanentclock
+package com.dshu610.permanentclock
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.permanentclock.models.OWMWeatherResponse
+import com.dshu610.permanentclock.models.OWMWeatherResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,8 +30,6 @@ import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-        const val API_KEY = "5c0a9ca8d7fbd4165b728d3bddc1d281"
         const val INTERVAL = 1800000L
         const val UNITS = "imperial"
     }
@@ -202,11 +200,11 @@ class MainActivity : AppCompatActivity() {
         val unit = sharedPref.getString("unit", UNITS)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(getString(R.string.owm_base_url))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service: OWMApi = retrofit.create(OWMApi::class.java)
-        val call = service.getCurrentWeather(API_KEY, lon, lat, unit)
+        val call = service.getCurrentWeather(getString(R.string.owm_api_key), lon, lat, unit)
         call.enqueue(object : Callback<OWMWeatherResponse> {
             override fun onResponse(
                 call: Call<OWMWeatherResponse>,
