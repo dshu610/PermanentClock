@@ -20,17 +20,23 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.Manifest
+import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.res.Configuration
+import android.net.Uri
 import android.preference.PreferenceManager
+import android.provider.MediaStore
+import android.util.ArraySet
 import android.widget.TextClock
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentResolverCompat
 import com.google.android.gms.location.*
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val INTERVAL = 1800000L
+        const val INTERVAL = 600000L
         const val UNITS = "imperial"
     }
 
@@ -40,6 +46,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var locationCallback: LocationCallback
+    private lateinit var imagePaths: MutableList<Uri>
+    private var imageIndex = 0
+    private val PERMISSION = arrayOf(
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +84,32 @@ class MainActivity : AppCompatActivity() {
                     Log.e("no perms", "booo")
                 }
             }
-
-        checkLocationPermission()
+        if (!hasPermissions(*PERMISSION)){
+            requestPermissions(PERMISSION, 1)
+        }
+        //checkLocationPermission()
         updateUIWithPrefs()
+        //checkMediaPermission()
+        //getPhotoList()
+    }
+
+    private fun getPhotoList() {
+        imagePaths = mutableListOf<Uri>()
+        val projection = arrayOf(MediaStore.Images.Media._ID)
+        val query = applicationContext.contentResolver.query( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, "", null, "")
+            ?.use { cursor ->
+                System.out.println(cursor.count)
+                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+                var num = 50
+                while (cursor.moveToNext() && num > 0){
+                    val id = cursor.getLong(idColumn)
+                    imagePaths.add(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id))
+                    num--
+                }
+                Log.e("imagePaths", imagePaths.joinToString(" | "))
+            }
+
+        Log.e("here", "pl")
     }
 
     private fun updateUIWithPrefs() {
@@ -84,19 +119,21 @@ class MainActivity : AppCompatActivity() {
         val locationColor = sharedPref.getInt("locationTextColor",  resources.getColor(R.color.weather_default, null))
 
         val clockView: TextClock = findViewById(R.id.textClock)
-        val locationView: TextView = findViewById(R.id.location)
+        val locationView: TextView? = findViewById(R.id.location)
         val weatherDetailsView: TextView = findViewById(R.id.weatherTemp)
         val dateView: TextClock = findViewById(R.id.textClockdate)
 
         clockView.setTextColor(clockColor)
-        locationView.setTextColor(locationColor)
+        locationView?.setTextColor(locationColor)
         weatherDetailsView.setTextColor(weatherColor)
         dateView.setTextColor(dateColor)
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            val clockMinView: TextClock = findViewById(R.id.textClockMM)
-            clockMinView.setTextColor(clockColor)
+            val clockMinView: TextClock? = findViewById(R.id.textClockMM)
+            clockMinView?.setTextColor(clockColor)
         }
+
+        changePhoto()
     }
 
     private fun stopLocationUpdates() {
@@ -121,6 +158,9 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
 
+    fun hasPermissions(vararg permissions: String): Boolean = permissions.all {
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+    }
     private fun checkLocationPermission() {
         if (
             ContextCompat.checkSelfPermission(
@@ -132,6 +172,19 @@ class MainActivity : AppCompatActivity() {
             getLocation()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+    private fun checkMediaPermission() {
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            initLocationRequest()
+            getLocation()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
 
@@ -184,10 +237,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun changePhoto() {
+        val photos: Set<String> = sharedPref.getStringSet("photos", ArraySet<String>())
+        if ( imageIndex >= photos.size) imageIndex = 0
+        if (photos.size > 0) {
+            val photoView: ImageView? = findViewById(R.id.photo)
+            photoView?.setImageURI(null)
+            photoView?.setImageURI(Uri.parse(photos.elementAt(imageIndex)))
+            imageIndex++
+        }
+
+    }
+
     private fun initWeatherHandler() {
         // setup hourly weather update
         mHandler = Handler(Looper.getMainLooper())
         mRunnable = Runnable {
+            changePhoto()
             getCurrentWeather()
             mHandler.postDelayed(mRunnable, INTERVAL)
         }
@@ -229,14 +295,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateWeatherUI(response: OWMWeatherResponse) {
-        val locView: TextView = findViewById(R.id.location)
+        val locView: TextView? = findViewById(R.id.location)
         val iconView: ImageView = findViewById(R.id.weatherIcon)
         val tempView: TextView = findViewById(R.id.weatherTemp)
 
         val imgResource = String.format("wi_%s_2x", response.weather[0].icon)
         val res = resources.getIdentifier(imgResource, "drawable", packageName)
         iconView.setImageResource(res)
-        locView.text = response.name
+        locView?.text = response.name
         val detailsFormat = "T:%s\u00b0\nH:%s%%\nW:%s"
         tempView.text = String.format(
             detailsFormat,

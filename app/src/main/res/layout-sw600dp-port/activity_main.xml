@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/photo"
+        app:layout_constraintHeight_percent="0.75"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:scaleType="fitCenter"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weather"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/weather_bg_default"
+        android:gravity="center_horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.25">
+        <ImageView
+            android:id="@+id/settingsButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_settings_black_24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextClock
+            android:id="@+id/textClockdate"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".25"
+            android:format12Hour="EEEE, MMMM dd"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:textColor="@color/date_default"
+            android:textSize="35dp"
+            android:paddingTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextClock
+            android:id="@+id/textClock"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".75"
+            app:layout_constraintWidth_percent="0.5"
+            android:gravity="center_horizontal"
+            android:format12Hour="hh:mm"
+            android:textColor="@color/clock_default"
+            android:textSize="100dp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textClockdate" />
+
+        <ImageView
+            android:id="@+id/weatherIcon"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintHeight_percent=".75"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            app:layout_constraintLeft_toRightOf="@id/textClock"
+            app:layout_constraintTop_toBottomOf="@id/textClockdate"
+            />
+        <TextView
+            android:id="@+id/weatherTemp"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintHeight_percent=".75"
+            android:layout_height="0dp"
+            android:textColor="@color/weather_default"
+            android:textSize="45dp"
+            android:typeface="monospace"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textClockdate"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
