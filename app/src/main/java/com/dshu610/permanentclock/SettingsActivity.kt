@@ -1,11 +1,16 @@
 package com.dshu610.permanentclock
 
+import android.content.ContentResolver
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.preference.PreferenceManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
+
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -22,6 +27,7 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
+            configPhotoPicker(rootKey)
 
             // add reset settings button and alert dialog
             val resetButton: Preference? = findPreference("reset")
@@ -52,6 +58,32 @@ class SettingsActivity : AppCompatActivity() {
             }
 
 
+        }
+
+        fun configPhotoPicker(rootKey: String?) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+            val photoPickerActivity = registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { result: MutableList<Uri>? ->
+                with(preferenceManager.sharedPreferences.edit()){
+                    putStringSet("photos", result?.map {
+                        activity?.contentResolver?.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        it.toString()
+                    }?.toMutableSet())
+                    commit()
+                }
+            }
+
+            // add reset settings button and alert dialog
+            val photoButton: Preference? = findPreference("photos")
+            photoButton?.setOnPreferenceClickListener {
+//                val intent = Intent()
+//                intent.type = "image/*"
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//                intent.action = Intent.ACTION_GET_CONTENT
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
+                photoPickerActivity.launch(arrayOf("image/*"))
+                true
+            }
         }
     }
 }

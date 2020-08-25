@@ -11,6 +11,9 @@
             app:key="unit"
             app:title="@string/unit_title"
             app:useSimpleSummaryProvider="true" />
+        <Preference
+            app:key="photos"
+            app:title="background photos" />
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/colors_header">
 
