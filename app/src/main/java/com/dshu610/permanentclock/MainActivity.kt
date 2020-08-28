@@ -20,6 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.res.Configuration
@@ -71,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         initSettingsButton()
-        initWeatherHandler()
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -87,29 +87,7 @@ class MainActivity : AppCompatActivity() {
         if (!hasPermissions(*PERMISSION)){
             requestPermissions(PERMISSION, 1)
         }
-        //checkLocationPermission()
         updateUIWithPrefs()
-        //checkMediaPermission()
-        //getPhotoList()
-    }
-
-    private fun getPhotoList() {
-        imagePaths = mutableListOf<Uri>()
-        val projection = arrayOf(MediaStore.Images.Media._ID)
-        val query = applicationContext.contentResolver.query( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, "", null, "")
-            ?.use { cursor ->
-                System.out.println(cursor.count)
-                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-                var num = 50
-                while (cursor.moveToNext() && num > 0){
-                    val id = cursor.getLong(idColumn)
-                    imagePaths.add(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id))
-                    num--
-                }
-                Log.e("imagePaths", imagePaths.joinToString(" | "))
-            }
-
-        Log.e("here", "pl")
     }
 
     private fun updateUIWithPrefs() {
@@ -158,40 +136,8 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
 
-    fun hasPermissions(vararg permissions: String): Boolean = permissions.all {
+    private fun hasPermissions(vararg permissions: String): Boolean = permissions.all {
         ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
-    }
-    private fun checkLocationPermission() {
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            initLocationRequest()
-            getLocation()
-        } else {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-    }
-    private fun checkMediaPermission() {
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            initLocationRequest()
-            getLocation()
-        } else {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        initWeatherHandler()
     }
 
     override fun onResume() {
@@ -201,16 +147,11 @@ class MainActivity : AppCompatActivity() {
         updateUIWithPrefs()
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.e("PermanentClock", "PermanentClock has stopped")
-        mHandler.removeCallbacksAndMessages(null)
-    }
-
     override fun onPause() {
         super.onPause()
         stopLocationUpdates()
         Log.e("PermanentClock", "PermanentClock has paused")
+        mHandler.removeCallbacksAndMessages(null)
     }
 
     private fun getLocation() {
@@ -242,8 +183,10 @@ class MainActivity : AppCompatActivity() {
         if ( imageIndex >= photos.size) imageIndex = 0
         if (photos.size > 0) {
             val photoView: ImageView? = findViewById(R.id.photo)
+            ObjectAnimator.ofFloat(photoView, View.ALPHA, 1f, 0f).setDuration(1000).start();
             photoView?.setImageURI(null)
             photoView?.setImageURI(Uri.parse(photos.elementAt(imageIndex)))
+            ObjectAnimator.ofFloat(photoView, View.ALPHA, 0f, 1f).setDuration(1000).start();
             imageIndex++
         }
 
