@@ -19,19 +19,17 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import android.Manifest
 import android.animation.ObjectAnimator
-import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.res.Configuration
 import android.net.Uri
 import android.preference.PreferenceManager
-import android.provider.MediaStore
 import android.util.ArraySet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.TextClock
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentResolverCompat
+import androidx.core.view.GestureDetectorCompat
 import com.google.android.gms.location.*
 import kotlin.math.roundToInt
 
@@ -41,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         const val UNITS = "imperial"
     }
 
+    private lateinit var mDetector: GestureDetectorCompat
     private lateinit var mHandler: Handler
     private lateinit var mRunnable: Runnable
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -84,17 +83,35 @@ class MainActivity : AppCompatActivity() {
                     Log.e("no perms", "booo")
                 }
             }
-        if (!hasPermissions(*PERMISSION)){
+        if (!hasPermissions(*PERMISSION)) {
             requestPermissions(PERMISSION, 1)
         }
         updateUIWithPrefs()
+
+        mDetector = GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                changePhoto()
+                return super.onDoubleTap(e)
+            }
+        })
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        mDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
     }
 
     private fun updateUIWithPrefs() {
-        val clockColor = sharedPref.getInt("clockTextColor", resources.getColor(R.color.clock_default, null))
-        val weatherColor = sharedPref.getInt("weatherTextColor",  resources.getColor(R.color.weather_default, null))
-        val dateColor = sharedPref.getInt("dateTextColor",  resources.getColor(R.color.date_default, null))
-        val locationColor = sharedPref.getInt("locationTextColor",  resources.getColor(R.color.weather_default, null))
+        val clockColor =
+            sharedPref.getInt("clockTextColor", resources.getColor(R.color.clock_default, null))
+        val weatherColor =
+            sharedPref.getInt("weatherTextColor", resources.getColor(R.color.weather_default, null))
+        val dateColor =
+            sharedPref.getInt("dateTextColor", resources.getColor(R.color.date_default, null))
+        val locationColor = sharedPref.getInt(
+            "locationTextColor",
+            resources.getColor(R.color.weather_default, null)
+        )
 
         val clockView: TextClock = findViewById(R.id.textClock)
         val locationView: TextView? = findViewById(R.id.location)
@@ -118,14 +135,14 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun initLocationRequest(){
-        val locationRequest = LocationRequest.create()?.apply{
+    private fun initLocationRequest() {
+        val locationRequest = LocationRequest.create()?.apply {
             interval = INTERVAL
             fastestInterval = INTERVAL
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-        locationCallback = object: LocationCallback() {
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
                 super.onLocationResult(p0)
                 p0 ?: return
@@ -133,7 +150,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     private fun hasPermissions(vararg permissions: String): Boolean = permissions.all {
@@ -180,7 +201,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changePhoto() {
         val photos: Set<String> = sharedPref.getStringSet("photos", ArraySet<String>())
-        if ( imageIndex >= photos.size) imageIndex = 0
+        if (imageIndex >= photos.size) imageIndex = 0
         if (photos.size > 0) {
             val photoView: ImageView? = findViewById(R.id.photo)
             ObjectAnimator.ofFloat(photoView, View.ALPHA, 1f, 0f).setDuration(1000).start();
@@ -222,7 +243,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful()) {
                     updateWeatherUI(response.body()!!)
                 } else {
-                    Log.e("PermanentClock", response.errorBody().toString() )
+                    Log.e("PermanentClock", response.errorBody().toString())
                 }
             }
 
